@@ -208,6 +208,9 @@ class Temp(Serializable):
 class Download(Serializable):
     def __init__(self):
         self._downloadSpeed = 20
+        self._reconnectEnabled = False
+        self._reconnectAttempts = 10
+        self._reconnectInterval = 3000
 
     def __setup__(self):
         App.FileDownloadManager.setPoolSize(self._downloadSpeed)
@@ -216,6 +219,24 @@ class Download(Serializable):
     def __save__(self):
         self._downloadSpeed = App.FileDownloadManager.getPoolSize()
         return super().__save__()
+
+    def isReconnectEnabled(self) -> bool:
+        return self._reconnectEnabled
+
+    def setReconnectEnabled(self, enabled: bool) -> None:
+        self._reconnectEnabled = enabled
+
+    def getReconnectAttempts(self) -> int:
+        return self._reconnectAttempts
+
+    def setReconnectAttempts(self, attempts: int) -> None:
+        self._reconnectAttempts = attempts
+
+    def getReconnectInterval(self) -> int:
+        return self._reconnectInterval
+
+    def setReconnectInterval(self, interval: int) -> None:
+        self._reconnectInterval = interval
 
 
 class ScheduledDownloads(Serializable):

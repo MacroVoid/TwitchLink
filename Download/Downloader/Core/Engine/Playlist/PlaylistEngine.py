@@ -22,7 +22,9 @@ import re
 class PlaylistEngine(BaseEngine):
     def __init__(self, downloadInfo: DownloadInfo, status: Modules.Status, progress: Modules.Progress, logger: Logger, parent: QtCore.QObject | None = None):
         super().__init__(downloadInfo, status, progress, logger, parent=parent)
-        self._playlistManager = PlaylistManager(self._networkAccessManager, self.downloadInfo.getUrl(), logger=self.logger, timeout=Config.PLAYLIST_REQUEST_TIMEOUT, maxRetryCount=Config.PLAYLIST_UPDATE_MAX_RETRY_COUNT, retryInterval=Config.PLAYLIST_UPDATE_RETRY_INTERVAL, parent=self)
+        maxRetryCount = App.Preferences.download.getReconnectAttempts() if App.Preferences.download.isReconnectEnabled() else 0
+        retryInterval = App.Preferences.download.getReconnectInterval() if App.Preferences.download.isReconnectEnabled() else Config.PLAYLIST_UPDATE_RETRY_INTERVAL
+        self._playlistManager = PlaylistManager(self._networkAccessManager, self.downloadInfo.getUrl(), logger=self.logger, timeout=Config.PLAYLIST_REQUEST_TIMEOUT, maxRetryCount=maxRetryCount, retryInterval=retryInterval, parent=self)
         self._playlistManager.errorOccurred.connect(self._playlistManagerErrorOccurred)
         self._playlistManager.playlistUpdated.connect(self._playlistUpdated)
         self._safeTempDirectory: SafeTempDirectory | None = None

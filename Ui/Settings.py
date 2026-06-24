@@ -71,6 +71,14 @@ class Settings(QtWidgets.QWidget):
         self._ui.speedSpinBox.setRange(DownloadEngineConfig.FILE_DOWNLOAD_MANAGER_MIN_POOL_SIZE, DownloadEngineConfig.FILE_DOWNLOAD_MANAGER_MAX_POOL_SIZE)
         self._ui.speedSpinBox.valueChanged.connect(self.setDownloadSpeed)
         self.setDownloadSpeed(App.FileDownloadManager.getPoolSize())
+        self._ui.reconnectEnabled.setChecked(App.Preferences.download.isReconnectEnabled())
+        self._ui.reconnectEnabled.toggled.connect(App.Preferences.download.setReconnectEnabled)
+        self._ui.reconnectAttemptsSlider.valueChanged.connect(self.setReconnectAttempts)
+        self._ui.reconnectAttemptsSpinBox.valueChanged.connect(self.setReconnectAttempts)
+        self.setReconnectAttempts(App.Preferences.download.getReconnectAttempts())
+        self._ui.reconnectIntervalSlider.valueChanged.connect(self.setReconnectInterval)
+        self._ui.reconnectIntervalSpinBox.valueChanged.connect(self.setReconnectInterval)
+        self.setReconnectInterval(App.Preferences.download.getReconnectInterval())
         self._ui.resetButton.clicked.connect(self.resetSettings)
         self.reloadBookmarkArea()
         App.GlobalDownloadManager.runningCountChangedSignal.connect(self.reload)
@@ -154,6 +162,16 @@ class Settings(QtWidgets.QWidget):
         App.FileDownloadManager.setPoolSize(speed)
         self._ui.downloadSpeed.setValueSilent(speed)
         self._ui.speedSpinBox.setValueSilent(speed)
+
+    def setReconnectAttempts(self, attempts: int) -> None:
+        App.Preferences.download.setReconnectAttempts(attempts)
+        self._ui.reconnectAttemptsSlider.setValueSilent(attempts)
+        self._ui.reconnectAttemptsSpinBox.setValueSilent(attempts)
+
+    def setReconnectInterval(self, interval: int) -> None:
+        App.Preferences.download.setReconnectInterval(interval)
+        self._ui.reconnectIntervalSlider.setValueSilent(interval)
+        self._ui.reconnectIntervalSpinBox.setValueSilent(interval)
 
     def resetSettings(self) -> None:
         if Utils.ask("warning", "#This will reset all settings.\nProceed?", parent=self):
