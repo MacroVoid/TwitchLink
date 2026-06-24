@@ -66,7 +66,6 @@ class Settings(QtWidgets.QWidget):
             self._ui.language.addItem(translationPack.getDisplayName(), userData=translationPack.getId())
         self._ui.language.setCurrentIndex(self._ui.language.findData(App.Translator.getCurrentTranslationPackId()))
         self._ui.language.currentIndexChanged.connect(self.updateLanguage)
-        self._ui.languageInfoIcon = Utils.setSvgIcon(self._ui.languageInfoIcon, Icons.ALERT_RED)
         self._ui.timezone.addItems(App.Preferences.localization.getTimezoneNameList())
         self._ui.timezone.setCurrentText(App.Preferences.localization.getTimezone().name())
         self._ui.timezone.currentTextChanged.connect(self.setTimezone)
@@ -89,6 +88,7 @@ class Settings(QtWidgets.QWidget):
         App.GlobalDownloadManager.runningCountChangedSignal.connect(self.reload)
         self.reload()
         App.ThemeManager.themeUpdated.connect(self._setupThemeStyle)
+        self.retranslateDynamicUi()
 
     def _setupThemeStyle(self) -> None:
         for index in range(self._ui.bookmarkList.count()):
@@ -133,7 +133,7 @@ class Settings(QtWidgets.QWidget):
     def addBookmark(self, bookmark: str) -> None:
         item = QtWidgets.QListWidgetItem(bookmark)
         item.setIcon(Icons.MOVE.icon)
-        item.setToolTip(T("#Drag to change order."))
+        item.setToolTip(T("messages.#drag_change_order"))
         self._ui.bookmarkList.addItem(item)
         self._ui.newBookmark.clear()
 
@@ -153,11 +153,10 @@ class Settings(QtWidgets.QWidget):
             App.ThemeManager.setThemeMode(App.ThemeManager.Modes.DARK)
 
     def showSearchExternalContentInfo(self) -> None:
-        Utils.info("information", "#Allow URL Search to retrieve external content.\nYou can download content outside of Twitch.", parent=self)
+        Utils.info("information", "messages.#allow_url_search_retrieve_external_cont", parent=self)
 
     def updateLanguage(self) -> None:
         App.Translator.setTranslationPack(self._ui.language.currentData())
-        self.requestRestart()
 
     def setTimezone(self, timezone: str) -> None:
         App.Preferences.localization.setTimezone(bytes(timezone, encoding="utf-8"))
@@ -179,7 +178,7 @@ class Settings(QtWidgets.QWidget):
         self._ui.reconnectIntervalSpinBox.setValueSilent(interval)
 
     def resetSettings(self) -> None:
-        if Utils.ask("warning", "#This will reset all settings.\nProceed?", parent=self):
+        if Utils.ask("warning", "prompts.#this_will_reset_all_settings_proceed", parent=self):
             App.Preferences.reset()
             self.requestRestart()
 
@@ -197,3 +196,17 @@ class Settings(QtWidgets.QWidget):
 
     def requestRestart(self) -> None:
         self.restartRequired.emit()
+
+    def changeEvent(self, event: QtCore.QEvent) -> None:
+        super().changeEvent(event)
+        if event.type() == QtCore.QEvent.Type.LanguageChange:
+            self._ui.retranslateUi(self)
+            self.retranslateDynamicUi()
+
+    def retranslateDynamicUi(self) -> None:
+        self._ui.defaultDirectoryLabel.setText(T("messages.default_directory"))
+        self._ui.searchDefaultDirectory.setToolTip(T("messages.browse"))
+        self._ui.reconnectArea.setTitle(T("messages.network_reconnection"))
+        self._ui.reconnectEnabled.setText(T("messages.enable_reconnect"))
+        self._ui.reconnectAttemptsLabel.setText(T("messages.reconnect_attempts"))
+        self._ui.reconnectIntervalLabel.setText(T("messages.retry_interval_ms"))

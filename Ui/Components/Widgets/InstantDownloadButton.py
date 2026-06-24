@@ -16,7 +16,7 @@ class InstantDownloadButton(DownloadButton):
         try:
             downloadInfo.setAbsoluteFileName(Utils.createUniqueFile(downloadInfo.directory, downloadInfo.fileName, downloadInfo.fileFormat, exclude=FileNameLocker.getLockedFiles()))
         except:
-            self.info("error", "#An error occurred while generating the file name.")
+            self.info("error", "errors.#an_error_occurred_while_generating_file")
             super().askDownload(downloadInfo)
         else:
             downloadInfo.saveOptionHistory()

@@ -79,7 +79,7 @@ class ScheduledDownloadPreview(QtWidgets.QWidget):
             if isinstance(self.scheduledDownload.status.getError(), ScheduledDownloadPreset.Exceptions.PreferredResolutionNotFound) and App.Preferences.general.isNotifyEnabled():
                 App.Instance.notification.toastMessage(
                     title=T("preferred-resolution-not-found"),
-                    message=f"{T('#Unable to start scheduled download for channel {channel}.', channel=self.scheduledDownload.channel.formattedName)}\n{T('started-at')}: {self.scheduledDownload.channel.stream.createdAt.toTimeZone(App.Preferences.localization.getTimezone()).toString('yyyy-MM-dd HH:mm:ss')}",
+                    message=f"{T("errors.#unable_start_scheduled_download_channel", channel=self.scheduledDownload.channel.formattedName)}\n{T('started-at')}: {self.scheduledDownload.channel.stream.createdAt.toTimeZone(App.Preferences.localization.getTimezone()).toString('yyyy-MM-dd HH:mm:ss')}",
                     icon=App.Instance.notification.Icons.Warning
                 )
         elif self.scheduledDownload.status.isDownloaderError():
@@ -186,3 +186,12 @@ class ScheduledDownloadPreview(QtWidgets.QWidget):
 
     def removeScheduledDownload(self) -> None:
         App.ScheduledDownloadManager.remove(self.scheduledDownloadId)
+
+    def changeEvent(self, event: QtCore.QEvent) -> None:
+        super().changeEvent(event)
+        if event.type() == QtCore.QEvent.Type.LanguageChange:
+            self._ui.retranslateUi(self)
+            self.retranslateDynamicUi()
+
+    def retranslateDynamicUi(self) -> None:
+        pass

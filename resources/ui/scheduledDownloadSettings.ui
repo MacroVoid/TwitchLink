@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Scheduled Download Settings</string>
+   <string>ui.scheduled_download_settings</string>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
@@ -40,7 +40,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Scheduled Download Settings</string>
+      <string>ui.scheduled_download_settings</string>
      </property>
     </widget>
    </item>
@@ -57,7 +57,7 @@
       <item>
        <widget class="QLabel" name="channelLabel">
         <property name="text">
-         <string>Channel ID</string>
+         <string>ui.channel_id</string>
         </property>
        </widget>
       </item>
@@ -80,7 +80,7 @@
       <item>
        <widget class="QLabel" name="directoryLabel">
         <property name="text">
-         <string>Directory</string>
+         <string>ui.directory</string>
         </property>
        </widget>
       </item>
@@ -106,7 +106,7 @@
          </size>
         </property>
         <property name="text">
-         <string>Browse</string>
+         <string>ui.browse</string>
         </property>
        </widget>
       </item>
@@ -119,14 +119,14 @@
       <item row="0" column="0">
        <widget class="QLabel" name="filenameTemplateLabel">
         <property name="text">
-         <string>Filename Template</string>
+         <string>ui.filename_template</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="fileFormatLabel">
         <property name="text">
-         <string>File Format</string>
+         <string>ui.file_format</string>
         </property>
        </widget>
       </item>
@@ -136,7 +136,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="filenamePreviewLabel">
         <property name="text">
-         <string>Filename Preview</string>
+         <string>ui.filename_preview</string>
         </property>
        </widget>
       </item>
@@ -161,7 +161,7 @@
          <item>
           <widget class="QToolButton" name="filenameTemplateInfo">
            <property name="toolTip">
-            <string>Help</string>
+            <string>ui.help</string>
            </property>
            <property name="icon">
             <iconset>
@@ -199,14 +199,14 @@
             <string notr="true">color: rgb(128, 128, 128);</string>
            </property>
            <property name="text">
-            <string>Filename Preview</string>
+            <string>ui.filename_preview</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QToolButton" name="filenamePreviewInfo">
            <property name="toolTip">
-            <string>Help</string>
+            <string>ui.help</string>
            </property>
            <property name="icon">
             <iconset>
@@ -268,7 +268,7 @@
                </size>
               </property>
               <property name="text">
-               <string>Quality</string>
+               <string>ui.quality</string>
               </property>
              </widget>
             </item>
@@ -304,14 +304,14 @@
             <item>
              <widget class="QCheckBox" name="preferredResolutionOnlyCheckBox">
               <property name="text">
-               <string>Preferred Resolution Only</string>
+               <string>ui.preferred_resolution_only</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QToolButton" name="preferredResolutionOnlyInfo">
               <property name="toolTip">
-               <string>Help</string>
+               <string>ui.help</string>
               </property>
               <property name="icon">
                <iconset>
@@ -331,27 +331,27 @@
    <item>
     <widget class="QGroupBox" name="adBlockArea">
      <property name="title">
-      <string>Ad Block (If the stream contains ads.)</string>
+      <string>ui.#ad_block_if_the_stream_contains</string>
      </property>
      <layout class="QHBoxLayout" name="adBlockAreaLayout">
       <item>
        <widget class="QRadioButton" name="adBlockSkipSegmentsRadioButton">
         <property name="text">
-         <string>Skip Segments (Recommended)</string>
+         <string>ui.skip_segments_recommended</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QRadioButton" name="adBlockAlternativeScreenRadioButton">
         <property name="text">
-         <string>Alternative Screen</string>
+         <string>ui.alternative_screen</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QToolButton" name="adBlockInfo">
         <property name="toolTip">
-         <string>Help</string>
+         <string>ui.help</string>
         </property>
         <property name="icon">
          <iconset>
@@ -365,27 +365,27 @@
    <item>
     <widget class="QGroupBox" name="encoderArea">
      <property name="title">
-      <string>Encoder</string>
+      <string>ui.encoder</string>
      </property>
      <layout class="QHBoxLayout" name="encoderAreaLayout">
       <item>
        <widget class="QRadioButton" name="remuxRadioButton">
         <property name="text">
-         <string>Remux (Recommended)</string>
+         <string>ui.remux_recommended</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QRadioButton" name="concatRadioButton">
         <property name="text">
-         <string>Concat</string>
+         <string>ui.concat</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QToolButton" name="encoderInfo">
         <property name="toolTip">
-         <string>Help</string>
+         <string>ui.help</string>
         </property>
         <property name="icon">
          <iconset>
@@ -407,7 +407,7 @@
       <string notr="true">color: rgb(255, 0, 0);</string>
      </property>
      <property name="text">
-      <string>These changes will take effect from the next download.</string>
+      <string>ui.#these_changes_will_take_effect_from</string>
      </property>
     </widget>
    </item>

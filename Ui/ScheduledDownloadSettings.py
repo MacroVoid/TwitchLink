@@ -85,7 +85,7 @@ class ScheduledDownloadSettings(QtWidgets.QDialog, WindowGeometryManager):
         self._ui.fileFormat.blockSignals(False)
 
     def showFilenamePreviewInfo(self) -> None:
-        Utils.info("information", T("#This is just a preview.\nSome values may be different from the actual ones. ({properties}, etc.)", properties=", ".join((f"{T('stream')} {T('id')}", T("title"), f"{T('channel')} {T('displayname')}"))), contentTranslate=False, parent=self)
+        Utils.info("information", T("info.#this_is_just_preview_some_values_may_be", properties=", ".join((f"{T('stream')} {T('id')}", T("title"), f"{T('channel')} {T('displayname')}"))), contentTranslate=False, parent=self)
 
     def preferredQualityChanged(self, index: int) -> None:
         self.virtualPreset.setPreferredQuality(index)
@@ -93,16 +93,16 @@ class ScheduledDownloadSettings(QtWidgets.QDialog, WindowGeometryManager):
         self.updateFilenamePreview()
 
     def showPreferredResolutionOnlyInfo(self) -> None:
-        Utils.info("information", "#Please note that certain video qualities (such as Source) may not be available immediately after a live broadcast begins.\nIf this option is disabled, it will automatically select and begin downloading the closest available quality.\nIf this option is enabled, it will wait until the selected quality is available.\n(Please be aware that if the selected quality continues to be unavailable, the download will not proceed.)", parent=self)
+        Utils.info("information", "errors.#please_note_that_certain_video_qualitie", parent=self)
 
     def showAdBlockInfo(self) -> None:
-        skipSegmentsInfo = T("#[Skip Segments]\n\nAds are skipped, but the stream during that time cannot be downloaded.\nIn this case, no alternative screen is shown, and it will directly connect to the scene after the ad, making the stream appear as if it's interrupted in the middle.")
-        alternativeScreenInfo = T("#[Alternative Screen]\n\nDisplays an alternate screen instead of skipping ads.\nIn this case, the entire length of the stream is maintained, but some players might not play the video correctly.")
-        Utils.info("information", f"{T('#If commercials are broadcast during this stream, they will be handled according to the following rules.')}\n\n{skipSegmentsInfo}\n\n\n{alternativeScreenInfo}", contentTranslate=False, parent=self)
+        skipSegmentsInfo = T("info.#_skip_segments_ads_are_skipped_but_stre")
+        alternativeScreenInfo = T("info.#_alternative_screen_displays_alternate")
+        Utils.info("information", f"{T("info.#if_commercials_are_broadcast_during_thi")}\n\n{skipSegmentsInfo}\n\n\n{alternativeScreenInfo}", contentTranslate=False, parent=self)
 
     def showEncoderInfo(self) -> None:
-        remuxInfo = T("#[Remux]\n\nThe file will be saved as a standard video file.\nThis involves a minor conversion process of the Transport Stream file to ensure its compatibility with standard players.\nThe quality of the video is retained, with only additional information about the video being modified for compatibility with standard players.")
-        concatInfo = T("#[Concat]\n\nThis feature enables you to store Transport Stream file in its original form, without any conversion to ensure its compatibility with standard players.\nSince these files are typically designed for streaming, they may not play correctly on certain players.\nAdditionally, if commercials are broadcast during a live stream or parts are missing due to network issues, some players might not play the video correctly.")
+        remuxInfo = T("prompts.#_remux_file_will_be_saved_as_standard_v")
+        concatInfo = T("errors.#_concat_this_feature_enables_you_store")
         Utils.info("information", f"{remuxInfo}\n\n\n{concatInfo}", contentTranslate=False, parent=self)
 
     def createPreviewStream(self) -> TwitchGQLModels.Stream:
@@ -160,12 +160,12 @@ class ScheduledDownloadSettings(QtWidgets.QDialog, WindowGeometryManager):
             formCheck.append(T("filename-template"))
         if len(formCheck) != 0:
             formInfo = "\n".join(formCheck)
-            Utils.info("warning", f"{T('#Some fields are empty.')}\n\n{formInfo}", contentTranslate=False, parent=self)
+            Utils.info("warning", f"{T("messages.#some_fields_are_empty")}\n\n{formInfo}", contentTranslate=False, parent=self)
             return
         if not self.isEditMode:
             channel = self.getChannelFromText(self.virtualPreset.channel)
             if channel == None:
-                Utils.info("error", "#Channel ID is invalid.", parent=self)
+                Utils.info("error", "errors.#channel_id_is_invalid", parent=self)
                 return
             else:
                 self.virtualPreset.channel = channel
@@ -173,3 +173,12 @@ class ScheduledDownloadSettings(QtWidgets.QDialog, WindowGeometryManager):
         self.scheduledDownloadPreset.saveOptionHistory()
         self.scheduledDownloadUpdated.emit(self.scheduledDownloadPreset)
         super().accept()
+
+    def changeEvent(self, event: QtCore.QEvent) -> None:
+        super().changeEvent(event)
+        if event.type() == QtCore.QEvent.Type.LanguageChange:
+            self._ui.retranslateUi(self)
+            self.retranslateDynamicUi()
+
+    def retranslateDynamicUi(self) -> None:
+        pass

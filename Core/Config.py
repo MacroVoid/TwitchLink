@@ -14,7 +14,7 @@ class Config(Meta):
     RESOURCE_ROOT = _P(APP_ROOT, "resources")
     UI_ROOT = _P(RESOURCE_ROOT, "ui")
     DEPENDENCIES_ROOT = _P(RESOURCE_ROOT, "dependencies", OSUtils.getOSType().lower())
-    DOCS_ROOT = _P(RESOURCE_ROOT, "docs")
+    DOCS_ROOT = _P(RESOURCE_ROOT, "translations", "docs")
 
     APPDATA_PATH = _P(OSUtils.getSystemAppDataPath(), Meta.APP_NAME)
     APPDATA_FILE = _P(APPDATA_PATH, "settings.json")
