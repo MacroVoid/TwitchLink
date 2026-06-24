@@ -34,13 +34,9 @@ class ScheduledDownloadSettings(QtWidgets.QDialog, WindowGeometryManager):
         self._ui.filenamePreviewInfo.clicked.connect(self.showFilenamePreviewInfo)
         Utils.setIconViewer(self._ui.filenamePreviewInfo, Icons.HELP)
         for quality in self.virtualPreset.getQualityList():
-            self._ui.preferredQuality.addItem(quality.toString() if quality.isValid() else T(quality.toString()))
+            self._ui.preferredQuality.addItem(quality.toString())
         self._ui.preferredQuality.setCurrentIndex(self.virtualPreset.preferredQualityIndex)
         self._ui.preferredQuality.currentIndexChanged.connect(self.preferredQualityChanged)
-        for frameRate in self.virtualPreset.getFrameRateList():
-            self._ui.preferredFrameRate.addItem(frameRate.toString() if frameRate.isValid() else T(frameRate.toString()))
-        self._ui.preferredFrameRate.setCurrentIndex(self.virtualPreset.preferredFrameRateIndex)
-        self._ui.preferredFrameRate.currentIndexChanged.connect(self.preferredFrameRateChanged)
         self._ui.preferredResolutionOnlyCheckBox.setChecked(self.virtualPreset.isPreferredResolutionOnlyEnabled())
         self._ui.preferredResolutionOnlyCheckBox.toggled.connect(self.virtualPreset.setPreferredResolutionOnlyEnabled)
         self._ui.preferredResolutionOnlyInfo.clicked.connect(self.showPreferredResolutionOnlyInfo)
@@ -96,10 +92,6 @@ class ScheduledDownloadSettings(QtWidgets.QDialog, WindowGeometryManager):
         self.reloadFileFormat()
         self.updateFilenamePreview()
 
-    def preferredFrameRateChanged(self, index: int) -> None:
-        self.virtualPreset.setPreferredFrameRate(index)
-        self.updateFilenamePreview()
-
     def showPreferredResolutionOnlyInfo(self) -> None:
         Utils.info("information", "#Please note that certain video qualities (such as Source) may not be available immediately after a live broadcast begins.\nIf this option is disabled, it will automatically select and begin downloading the closest available quality.\nIf this option is enabled, it will wait until the selected quality is available.\n(Please be aware that if the selected quality continues to be unavailable, the download will not proceed.)", parent=self)
 
@@ -149,7 +141,6 @@ class ScheduledDownloadSettings(QtWidgets.QDialog, WindowGeometryManager):
         self.scheduledDownloadPreset.filenameTemplate = self.virtualPreset.filenameTemplate
         self.scheduledDownloadPreset.fileFormat = self.virtualPreset.fileFormat
         self.scheduledDownloadPreset.preferredQualityIndex = self.virtualPreset.preferredQualityIndex
-        self.scheduledDownloadPreset.preferredFrameRateIndex = self.virtualPreset.preferredFrameRateIndex
         self.scheduledDownloadPreset.preferredResolutionOnly = self.virtualPreset.preferredResolutionOnly
         self.scheduledDownloadPreset.skipAds = self.virtualPreset.skipAds
         self.scheduledDownloadPreset.remux = self.virtualPreset.remux

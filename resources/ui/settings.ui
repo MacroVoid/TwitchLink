@@ -123,6 +123,51 @@
             </layout>
            </widget>
           </item>
+          <item>
+           <widget class="QWidget" name="defaultDirectoryArea" native="true">
+            <layout class="QHBoxLayout" name="defaultDirectoryAreaLayout">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="defaultDirectoryLabel">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Default Directory</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="defaultDirectory"/>
+             </item>
+             <item>
+              <widget class="QToolButton" name="searchDefaultDirectory">
+               <property name="toolTip">
+                <string>Browse</string>
+               </property>
+               <property name="icon">
+                <iconset>
+                 <normaloff>../icons/light/folder.svg</normaloff>../icons/light/folder.svg</iconset>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>

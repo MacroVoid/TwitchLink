@@ -50,6 +50,7 @@ class General(Serializable):
         self._notify = True
         self._useSystemTray = False
         self._bookmarks = []
+        self._defaultDirectory = ""
 
     def setOpenProgressWindowEnabled(self, enabled: bool) -> None:
         self._openProgressWindow = enabled
@@ -74,6 +75,12 @@ class General(Serializable):
 
     def getBookmarks(self) -> list[str]:
         return self._bookmarks
+
+    def setDefaultDirectory(self, directory: str) -> None:
+        self._defaultDirectory = directory
+
+    def getDefaultDirectory(self) -> str:
+        return getattr(self, "_defaultDirectory", "") or Config.DEFAULT_DIRECTORY
 
 
 class Templates(Serializable):

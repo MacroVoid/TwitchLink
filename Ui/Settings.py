@@ -17,6 +17,11 @@ class Settings(QtWidgets.QWidget):
         self._ui.windowClose.currentIndexChanged.connect(self.windowCloseChanged)
         if not Utils.isMinimizeToSystemTraySupported():
             self._ui.windowCloseArea.hide()
+            
+        self._ui.defaultDirectory.setText(App.Preferences.general.getDefaultDirectory())
+        self._ui.defaultDirectory.editingFinished.connect(self.setDefaultDirectoryFromLineEdit)
+        self._ui.searchDefaultDirectory.clicked.connect(self.askDefaultDirectory)
+        
         self.streamTemplateInfoWindow = FileNameTemplateInfo(FileNameTemplateInfo.TYPE.STREAM, parent=self)
         self._ui.streamFilename.setText(App.Preferences.templates.getStreamFilename())
         self._ui.streamFilename.editingFinished.connect(self.setStreamFilename)
@@ -177,6 +182,18 @@ class Settings(QtWidgets.QWidget):
         if Utils.ask("warning", "#This will reset all settings.\nProceed?", parent=self):
             App.Preferences.reset()
             self.requestRestart()
+
+    def askDefaultDirectory(self) -> None:
+        directory = Utils.askDirectory(self._ui.defaultDirectory.text() or Config.DEFAULT_DIRECTORY, parent=self)
+        if directory != "":
+            App.Preferences.general.setDefaultDirectory(directory)
+            self._ui.defaultDirectory.setText(directory)
+
+    def setDefaultDirectoryFromLineEdit(self) -> None:
+        directory = self._ui.defaultDirectory.text().strip()
+        directory = directory.strip("\"'")
+        App.Preferences.general.setDefaultDirectory(directory)
+        self._ui.defaultDirectory.setText(directory)
 
     def requestRestart(self) -> None:
         self.restartRequired.emit()

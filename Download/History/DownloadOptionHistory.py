@@ -35,7 +35,18 @@ class FileHistory:
         return self._directory
 
     def getUpdatedDirectory(self) -> str:
-        for directory in [self.getDirectory(), Config.DEFAULT_DIRECTORY, Config.APPDATA_PATH]:
+        from Core import App
+        try:
+            default_dir = App.Preferences.general.getDefaultDirectory()
+        except Exception:
+            default_dir = ""
+            
+        directories = []
+        if default_dir:
+            directories.append(default_dir)
+        directories.extend([self.getDirectory(), Config.DEFAULT_DIRECTORY, Config.APPDATA_PATH])
+
+        for directory in directories:
             try:
                 OSUtils.createDirectory(directory)
                 return directory
