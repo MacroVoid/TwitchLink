@@ -173,6 +173,13 @@ class PlaylistEngine(BaseEngine):
                         break
             segmentDownloader.file.close()
             self.progress.files += 1
+            self.progress.downloadedTimeline.append({
+                "video_start": self.progress.milliseconds / 1000.0,
+                "video_duration": segmentDownloader.segment.totalMilliseconds / 1000.0,
+                "original_start": segmentDownloader.segment.startsAt / 1000.0,
+                "original_duration": segmentDownloader.segment.totalMilliseconds / 1000.0,
+                "original_timestamp": segmentDownloader.segment.datetime.toMSecsSinceEpoch() * 1000 if segmentDownloader.segment.datetime else None
+            })
             self.progress.milliseconds += segmentDownloader.segment.totalMilliseconds
             self.progress.byteSize = self.file.size()
             self.progress.totalByteSize = self.progress.byteSize

@@ -46,6 +46,7 @@ class ScheduledDownloadPreset(Serializable):
         self.fileFormat = self.getAvailableFormat()
         self.skipAds = self.optionHistory.isSkipAdsEnabled()
         self.remux = self.optionHistory.isRemuxEnabled()
+        self.downloadChat = self.optionHistory.isDownloadChatEnabled()
         self.preferredResolutionOnly = False
         self.enabled = True
 
@@ -54,6 +55,12 @@ class ScheduledDownloadPreset(Serializable):
 
     def isEnabled(self) -> bool:
         return self.enabled
+        
+    def setDownloadChatEnabled(self, enabled: bool) -> None:
+        self.downloadChat = enabled
+        
+    def isDownloadChatEnabled(self) -> bool:
+        return self.downloadChat
 
     @property
     def optionHistory(self) -> DownloadOptionHistory.ScheduledDownloadHistory:
@@ -161,3 +168,4 @@ class ScheduledDownloadPreset(Serializable):
             self.optionHistory.setFormat(self.fileFormat)
         self.optionHistory.setSkipAdsEnabled(self.skipAds)
         self.optionHistory.setRemuxEnabled(self.remux)
+        self.optionHistory.setDownloadChatEnabled(self.downloadChat)

@@ -42,6 +42,7 @@ class DownloadInfo(Serializable):
     def __init__(self, content: Stream | Video | Clip, playback: TwitchStreamPlayback | TwitchVideoPlayback | TwitchClipPlayback):
         self.content = content
         self.playback = playback
+        self.downloadChat = self.optionHistory.isDownloadChatEnabled()
         if self.type.isStream():
             self.skipAds = False if self.playback.token.hideAds else self.optionHistory.isSkipAdsEnabled()
             self.remux = self.optionHistory.isRemuxEnabled()

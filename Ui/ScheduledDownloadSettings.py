@@ -41,6 +41,8 @@ class ScheduledDownloadSettings(QtWidgets.QDialog, WindowGeometryManager):
         self._ui.preferredResolutionOnlyCheckBox.toggled.connect(self.virtualPreset.setPreferredResolutionOnlyEnabled)
         self._ui.preferredResolutionOnlyInfo.clicked.connect(self.showPreferredResolutionOnlyInfo)
         Utils.setIconViewer(self._ui.preferredResolutionOnlyInfo, Icons.HELP)
+        self._ui.downloadChatCheckBox.setChecked(self.virtualPreset.isDownloadChatEnabled())
+        self._ui.downloadChatCheckBox.toggled.connect(self.virtualPreset.setDownloadChatEnabled)
         self._ui.adBlockSkipSegmentsRadioButton.setChecked(self.virtualPreset.isSkipAdsEnabled())
         self._ui.adBlockAlternativeScreenRadioButton.setChecked(not self.virtualPreset.isSkipAdsEnabled())
         self._ui.adBlockSkipSegmentsRadioButton.toggled.connect(self.virtualPreset.setSkipAdsEnabled)
@@ -144,6 +146,7 @@ class ScheduledDownloadSettings(QtWidgets.QDialog, WindowGeometryManager):
         self.scheduledDownloadPreset.preferredResolutionOnly = self.virtualPreset.preferredResolutionOnly
         self.scheduledDownloadPreset.skipAds = self.virtualPreset.skipAds
         self.scheduledDownloadPreset.remux = self.virtualPreset.remux
+        self.scheduledDownloadPreset.downloadChat = self.virtualPreset.downloadChat
 
     def getChannelFromText(self, text: str) -> str | None:
         parsedData = TwitchQueryParser.parseQuery(text)

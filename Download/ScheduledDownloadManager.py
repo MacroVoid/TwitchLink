@@ -310,6 +310,7 @@ class ScheduledDownload(QtCore.QObject):
         if not playback.token.hideAds:
             downloadInfo.setSkipAdsEnabled(self.preset.isSkipAdsEnabled())
         downloadInfo.setRemuxEnabled(self.preset.isRemuxEnabled())
+        downloadInfo.setDownloadChat(self.preset.isDownloadChatEnabled())
         self.downloader = TwitchDownloader.create(downloadInfo, parent=self)
         self.downloader.finished.connect(self.downloadResultHandler)
         self.downloaderCreated.emit(self, self.downloader)

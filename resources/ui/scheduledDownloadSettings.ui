@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <ui version="4.0">
  <class>Dialog</class>
  <widget class="QDialog" name="Dialog">
@@ -20,7 +20,7 @@
    <string>ui.scheduled_download_settings</string>
   </property>
   <property name="locale">
-   <locale language="English" country="UnitedStates"/>
+   <locale language="English" country="UnitedStates" />
   </property>
   <property name="sizeGripEnabled">
    <bool>false</bool>
@@ -131,7 +131,7 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QComboBox" name="fileFormat"/>
+       <widget class="QComboBox" name="fileFormat" />
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="filenamePreviewLabel">
@@ -156,7 +156,7 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QLineEdit" name="filenameTemplate"/>
+          <widget class="QLineEdit" name="filenameTemplate" />
          </item>
          <item>
           <widget class="QToolButton" name="filenameTemplateInfo">
@@ -223,7 +223,7 @@
    <item>
     <widget class="QWidget" name="settingsArea" native="true">
      <layout class="QVBoxLayout" name="settingsAreaLayout">
-      <property name="leftMargin">
+      <item><widget class="QCheckBox" name="downloadChatCheckBox"><property name="text"><string>ui.download_chat</string></property></widget></item><property name="leftMargin">
        <number>0</number>
       </property>
       <property name="topMargin">
@@ -463,7 +463,7 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources />
  <connections>
   <connection>
    <sender>buttonBox</sender>

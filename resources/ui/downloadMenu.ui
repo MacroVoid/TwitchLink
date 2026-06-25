@@ -682,6 +682,33 @@
        </widget>
       </item>
       <item>
+       <widget class="QGroupBox" name="chatArea">
+        <property name="title">
+         <string>ui.chat</string>
+        </property>
+        <layout class="QHBoxLayout" name="chatAreaLayout">
+         <item>
+          <widget class="QCheckBox" name="downloadChatCheckBox">
+           <property name="text">
+            <string>ui.download_chat</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="downloadChatInfo">
+           <property name="toolTip">
+            <string>ui.help</string>
+           </property>
+           <property name="icon">
+            <iconset>
+             <normaloff>../icons/light/help.svg</normaloff>../icons/light/help.svg</iconset>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
        <widget class="QGroupBox" name="encoderArea">
         <property name="title">
          <string>ui.encoder</string>

@@ -81,7 +81,19 @@ class AudioFormatHistory:
         return self.SUPPORTED_AUDIO_FORMATS
 
 
-class StreamHistory(BaseOptionHistory, FileHistory, AudioFormatHistory, Serializable):
+class ChatHistory:
+    def __init__(self):
+        super().__init__()
+        self.setDownloadChatEnabled(False)
+
+    def setDownloadChatEnabled(self, enabled: bool) -> None:
+        self.downloadChat = enabled
+
+    def isDownloadChatEnabled(self) -> bool:
+        return getattr(self, "downloadChat", False)
+
+
+class StreamHistory(BaseOptionHistory, FileHistory, AudioFormatHistory, ChatHistory, Serializable):
     SUPPORTED_FORMATS = [
         "ts",
         "mp4",
@@ -106,7 +118,7 @@ class StreamHistory(BaseOptionHistory, FileHistory, AudioFormatHistory, Serializ
         return self.remux
 
 
-class VideoHistory(BaseOptionHistory, FileHistory, AudioFormatHistory, Serializable):
+class VideoHistory(BaseOptionHistory, FileHistory, AudioFormatHistory, ChatHistory, Serializable):
     SUPPORTED_FORMATS = [
         "ts",
         "mp4",
@@ -138,7 +150,7 @@ class VideoHistory(BaseOptionHistory, FileHistory, AudioFormatHistory, Serializa
         return self.remux
 
 
-class ClipHistory(BaseOptionHistory, FileHistory, Serializable):
+class ClipHistory(BaseOptionHistory, FileHistory, ChatHistory, Serializable):
     SUPPORTED_FORMATS = [
         "mp4",
         "mkv"

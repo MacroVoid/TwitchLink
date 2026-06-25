@@ -91,3 +91,8 @@ Updater = _Updater(parent=Instance)
 from AppData.Preferences import Preferences as _Preferences
 Preferences = _Preferences(logger=Instance.logger, parent=Instance)
 Preferences.load()
+
+from Download.Downloader.Core.ChatRecoveryManager import ChatRecoveryManager as _ChatRecoveryManager
+import threading
+ChatRecovery = _ChatRecoveryManager(logger=Instance.logger)
+threading.Thread(target=ChatRecovery.recoverAll, daemon=True).start()

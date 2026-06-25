@@ -481,5 +481,8 @@
   "ui.when_closing_window": "При закрытии окна",
   "ui.#you_can_change_it_later_in": "Вы сможете изменить это позже в настройках.",
   "ui.#your_download_history_will_be_displayed": "Здесь будет отображаться ваша история загрузок.",
+  "ui.chat": "Чат",
+  "ui.download_chat": "Скачать чат",
+  "messages.#the_chat_will_be_downloaded_in_json": "Чат будет скачан в формате JSON вместе с видео.",
   "ui.copyright": "авторские права"
 }

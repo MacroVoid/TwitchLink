@@ -1,5 +1,6 @@
 from .Engine import Modules
 from .Engine.BaseEngine import BaseEngine
+from .Engine.ChatEngine import ChatEngine
 
 from Core.Config import Config
 from Core.GlobalExceptions import Exceptions
@@ -55,10 +56,31 @@ class BaseDownloader(QtCore.QThread):
 
     def run(self) -> None:
         engine = self._createEngine()
+        chatEngine = ChatEngine(self.downloadInfo, self.logger, parent=None)
+        
+        from Download.Downloader.Core.ChatRecoveryManager import ChatRecoveryManager
+        import os
+        chatRecoveryManager = ChatRecoveryManager(self.logger)
+        def _saveRecovery():
+            if getattr(self.downloadInfo, "downloadChat", False):
+                videoFilePath = self.downloadInfo.getAbsoluteFileName()
+                chatFilePath = os.path.splitext(videoFilePath)[0] + ".json"
+                isLivestream = self.downloadInfo.type.isStream()
+                chatRecoveryManager.saveRecoveryState(str(self.uuid), chatFilePath, isLivestream, self.progress.downloadedTimeline)
+                
+        self.progress.updated.connect(_saveRecovery)
+        
+        self._abortRequested.connect(lambda e: chatEngine.abort(cleanUp=False))
+        engine.finished.connect(lambda: chatEngine.abort(cleanUp=False))
+        engine.finished.connect(lambda: chatEngine.postProcess(self.progress.downloadedTimeline))
+        engine.finished.connect(lambda: chatRecoveryManager.removeRecoveryState(str(self.uuid)))
         engine.finished.connect(self.exit)
+        
+        chatEngine.start()
         engine.start()
         self.exec()
         engine.deleteLater()
+        chatEngine.deleteLater()
 
     def cancel(self) -> None:
         self.logger.warning("[ACTION] Cancel")

@@ -481,5 +481,8 @@
   "ui.when_closing_window": "When closing window",
   "ui.#you_can_change_it_later_in": "You can change it later in settings.",
   "ui.#your_download_history_will_be_displayed": "Your download history will be displayed here.",
+  "ui.chat": "Chat",
+  "ui.download_chat": "Download chat",
+  "messages.#the_chat_will_be_downloaded_in_json": "The chat will be downloaded in JSON format alongside the video.",
   "ui.copyright": "copyright"
 }

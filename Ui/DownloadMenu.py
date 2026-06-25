@@ -35,6 +35,7 @@ class DownloadMenu(QtWidgets.QDialog, WindowGeometryManager):
             self._ui.resolution.addItem(FileNameGenerator.generateResolutionName(resolution))
         self._ui.resolution.setCurrentIndex(self.downloadInfo.selectedResolutionIndex)
         self._ui.resolution.currentIndexChanged.connect(self.setResolution)
+        self.setupChatArea()
         if self.downloadInfo.type.isStream():
             self._ui.cropArea.hide()
             if self.downloadInfo.playback.token.hideAds:
@@ -135,6 +136,13 @@ class DownloadMenu(QtWidgets.QDialog, WindowGeometryManager):
         self._ui.encoderInfo.clicked.connect(self.showEncoderInfo)
         Utils.setIconViewer(self._ui.encoderInfo, Icons.HELP)
 
+    def setupChatArea(self) -> None:
+        self._ui.downloadChatCheckBox.setChecked(self.downloadInfo.downloadChat)
+        self._ui.downloadChatCheckBox.toggled.connect(self.downloadInfo.optionHistory.setDownloadChatEnabled)
+        self._ui.downloadChatCheckBox.toggled.connect(lambda enabled: setattr(self.downloadInfo, 'downloadChat', enabled))
+        self._ui.downloadChatInfo.clicked.connect(self.showDownloadChatInfo)
+        Utils.setIconViewer(self._ui.downloadChatInfo, Icons.HELP)
+
     def startRangeChanged(self) -> None:
         self.setFromSeconds(self.checkCropRange(self.getFromSeconds(), maximum=int(self.downloadInfo.content.lengthSeconds) - 1))
 
@@ -234,6 +242,9 @@ class DownloadMenu(QtWidgets.QDialog, WindowGeometryManager):
 
     def showUnmuteVideoInfo(self) -> None:
         Utils.info("information", "errors.#if_there_are_no_problems_sound_source_u", parent=self)
+
+    def showDownloadChatInfo(self) -> None:
+        Utils.info("information", "messages.#the_chat_will_be_downloaded_in_json", parent=self)
 
     def showUpdateTrackInfo(self) -> None:
         Utils.info("information", "messages.#downloads_live_replay_continuously_unti", parent=self)
