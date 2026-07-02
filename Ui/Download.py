@@ -131,9 +131,9 @@ class Download(QtWidgets.QWidget):
                         self.showProgress(100)
                     else:
                         self.showAlert(T("download-canceled"))
-                elif self._downloader.status.hasError():
+                elif self._downloader.status.getError() != None:
                     self.showAlert(T("download-aborted"))
-            elif self._downloader.status.hasError():
+            elif self._downloader.status.getError() != None:
                 self.showAlert(T("download-aborted"))
             else:
                 self.showStatus(T("download-completed"))
@@ -144,7 +144,7 @@ class Download(QtWidgets.QWidget):
         else:
             self._ui.openFolderButton.show()
 
-        if self._downloader.status.isDone() and not self._downloader.status.isFileRemoved() and not self._downloader.status.hasError():
+        if self._downloader.status.isDone() and not self._downloader.status.isFileRemoved() and self._downloader.status.getError() == None:
             self._ui.openFileButton.show()
         
         self._ui.downloadViewControlBar.openLogsButton.setVisible()
