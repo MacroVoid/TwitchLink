@@ -54,8 +54,8 @@ class ExternalBrowserDriverThread(QtCore.QThread):
                     channel=self._browserInfo.getChannel(),
                     headless=False,
                     no_viewport=True,
-                    args=["--start-maximized", "--dummy-flag=--disable-blink-features"],
-                    ignore_default_args=["--disable-blink-features=AutomationControlled"],
+                    args=["--start-maximized"],
+                    ignore_default_args=["--enable-automation"],
                     chromium_sandbox=True
                 )
                 page = context.new_page() if len(context.pages) == 0 else context.pages[0]
