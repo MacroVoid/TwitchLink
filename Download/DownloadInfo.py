@@ -43,11 +43,11 @@ class DownloadInfo(Serializable):
         self.content = content
         self.playback = playback
         self.downloadChat = self.optionHistory.isDownloadChatEnabled()
+        self.range = (None, None)
         if self.type.isStream():
             self.skipAds = False if self.playback.token.hideAds else self.optionHistory.isSkipAdsEnabled()
             self.remux = self.optionHistory.isRemuxEnabled()
         elif self.type.isVideo():
-            self.range = (None, None)
             self.unmuteVideo = self.optionHistory.isUnmuteVideoEnabled()
             self.updateTrack = self.optionHistory.isUpdateTrackEnabled()
             self.prioritize = False
