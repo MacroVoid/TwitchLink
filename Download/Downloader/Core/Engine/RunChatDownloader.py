@@ -25,6 +25,30 @@ def patched_download_gql(self, ops):
 
 TwitchChatDownloader._download_gql = patched_download_gql
 
+# Monkey-patch json.dump and json.dumps to default ensure_ascii to False for human-readable intermediate files
+import json
+original_json_dump = json.dump
+original_json_dumps = json.dumps
+
+def patched_json_dump(obj, fp, *, skipkeys=False, ensure_ascii=False, check_circular=True,
+                      allow_nan=True, cls=None, indent=None, separators=None,
+                      default=None, sort_keys=False, **kw):
+    return original_json_dump(obj, fp, skipkeys=skipkeys, ensure_ascii=ensure_ascii,
+                              check_circular=check_circular, allow_nan=allow_nan, cls=cls,
+                              indent=indent, separators=separators, default=default,
+                              sort_keys=sort_keys, **kw)
+
+def patched_json_dumps(obj, *, skipkeys=False, ensure_ascii=False, check_circular=True,
+                       allow_nan=True, cls=None, indent=None, separators=None,
+                       default=None, sort_keys=False, **kw):
+    return original_json_dumps(obj, skipkeys=skipkeys, ensure_ascii=ensure_ascii,
+                               check_circular=check_circular, allow_nan=allow_nan, cls=cls,
+                               indent=indent, separators=separators, default=default,
+                               sort_keys=sort_keys, **kw)
+
+json.dump = patched_json_dump
+json.dumps = patched_json_dumps
+
 # Original method uses `cursor` which fails integrity check now. We must use contentOffsetSeconds.
 from chat_downloader.utils.core import multi_get, ensure_seconds, attempts
 from requests.exceptions import RequestException
