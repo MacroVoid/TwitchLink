@@ -304,6 +304,7 @@ class ScheduledDownload(QtCore.QObject):
     def createDownloader(self, playback: TwitchPlaybackModels.TwitchStreamPlayback) -> None:
         downloadInfo = DownloadInfo(self.channel.stream, playback)
         downloadInfo.setDirectory(self.preset.directory)
+        downloadInfo.setCreateSubfolderForDownloadsEnabled(self.preset.isCreateSubfolderForDownloadsEnabled())
         selectedResolution = self.preset.selectResolution(playback.getResolutions())
         downloadInfo.setResolution(playback.getResolutions().index(selectedResolution))
         downloadInfo.setAbsoluteFileName(Utils.createUniqueFile(downloadInfo.directory, FileNameGenerator.generateFileName(self.channel.stream, selectedResolution, filenameTemplate=self.preset.filenameTemplate), self.preset.fileFormat, exclude=FileNameLocker.getLockedFiles()))

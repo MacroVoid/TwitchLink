@@ -43,6 +43,9 @@ class ScheduledDownloadSettings(QtWidgets.QDialog, WindowGeometryManager):
         Utils.setIconViewer(self._ui.preferredResolutionOnlyInfo, Icons.HELP)
         self._ui.downloadChatCheckBox.setChecked(self.virtualPreset.isDownloadChatEnabled())
         self._ui.downloadChatCheckBox.toggled.connect(self.virtualPreset.setDownloadChatEnabled)
+        self._ui.downloadChatCheckBox.toggled.connect(self.onDownloadChatToggled)
+        self._ui.createSubfolderForDownloadsCheckBox.setChecked(self.virtualPreset.isCreateSubfolderForDownloadsEnabled())
+        self._ui.createSubfolderForDownloadsCheckBox.toggled.connect(self.virtualPreset.setCreateSubfolderForDownloadsEnabled)
         
         self._ui.adBlockSkipSegmentsRadioButton.setChecked(self.virtualPreset.isSkipAdsEnabled())
         self._ui.adBlockAlternativeScreenRadioButton.setChecked(not self.virtualPreset.isSkipAdsEnabled())
@@ -149,6 +152,15 @@ class ScheduledDownloadSettings(QtWidgets.QDialog, WindowGeometryManager):
         self.scheduledDownloadPreset.skipAds = self.virtualPreset.skipAds
         self.scheduledDownloadPreset.remux = self.virtualPreset.remux
         self.scheduledDownloadPreset.downloadChat = self.virtualPreset.downloadChat
+        self.scheduledDownloadPreset.createSubfolderForDownloads = self.virtualPreset.createSubfolderForDownloads
+
+    def onDownloadChatToggled(self, enabled: bool) -> None:
+        from Core import App
+        if enabled:
+            if App.Preferences.download.isCreateSubfolderForDownloadsEnabled():
+                self._ui.createSubfolderForDownloadsCheckBox.setChecked(True)
+        else:
+            self._ui.createSubfolderForDownloadsCheckBox.setChecked(False)
 
     def getChannelFromText(self, text: str) -> str | None:
         parsedData = TwitchQueryParser.parseQuery(text)

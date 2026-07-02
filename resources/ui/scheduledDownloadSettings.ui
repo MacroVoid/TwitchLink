@@ -224,6 +224,7 @@
     <widget class="QWidget" name="settingsArea" native="true">
      <layout class="QVBoxLayout" name="settingsAreaLayout">
       <item><widget class="QCheckBox" name="downloadChatCheckBox"><property name="text"><string>ui.download_chat</string></property></widget></item>
+      <item><widget class="QCheckBox" name="createSubfolderForDownloadsCheckBox"><property name="text"><string>ui.#create_subfolder_for_downloads</string></property></widget></item>
       <property name="leftMargin">
        <number>0</number>
       </property>
