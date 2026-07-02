@@ -17,6 +17,7 @@ class BaseDownloader(QtCore.QThread):
     started = QtCore.pyqtSignal(object)
     finished = QtCore.pyqtSignal(object)
     _abortRequested = QtCore.pyqtSignal(Exception)
+    _finishEarlyRequested = QtCore.pyqtSignal()
 
     def __init__(self, downloadInfo: DownloadInfo, parent: QtCore.QObject | None = None):
         super().__init__(parent=parent)
@@ -92,6 +93,10 @@ class BaseDownloader(QtCore.QThread):
     def cancel(self) -> None:
         self.logger.warning("[ACTION] Cancel")
         self.abort(Exceptions.AbortRequested())
+
+    def finishEarly(self) -> None:
+        self.logger.warning("[ACTION] Finish Early")
+        self._finishEarlyRequested.emit()
 
     def abort(self, exception: Exception) -> None:
         if self.status.terminateState.isFalse() and not self.status.isDone():

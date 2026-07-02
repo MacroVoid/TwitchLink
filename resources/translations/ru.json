@@ -487,5 +487,6 @@
     "ui.copyright": "авторские права",
     "ui.include_counted": "Склеивать с подсчетом",
     "ui.download_segments_data": "Скачивать данные об отрезках",
-    "ui.#create_subfolder_for_downloads": "Создавать отдельную папку для каждого скачивания"
+    "ui.#create_subfolder_for_downloads": "Создавать отдельную папку для каждого скачивания",
+    "ui.finish": "Завершить"
 }

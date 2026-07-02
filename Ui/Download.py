@@ -33,6 +33,7 @@ class Download(QtWidgets.QWidget):
         self._updateTrackInfoDisplay = UpdateTrackInfoDisplay(target=self._ui.updateTrackInfo, parent=self)
         self._ui.pauseButton.clicked.connect(self.pauseResume)
         self._ui.cancelButton.clicked.connect(self.cancel)
+        self._ui.finishButton.clicked.connect(self.finishEarly)
         self._ui.openFolderButton.clicked.connect(self.openFolder)
         Utils.setIconViewer(self._ui.openFolderButton, Icons.FOLDER)
         self._ui.openFileButton.clicked.connect(self.openFile)
@@ -64,19 +65,18 @@ class Download(QtWidgets.QWidget):
         self._ui.cancelButton.show()
         if isinstance(self._downloader, StreamDownloader):
             self._ui.pauseButton.hide()
-            self._ui.cancelButton.setText(T("stop"))
+            self._ui.finishButton.show()
         elif isinstance(self._downloader, VideoDownloader):
             self._ui.pauseButton.show()
-            self._ui.cancelButton.setText(T("cancel"))
+            self._ui.finishButton.show()
         else:
             self._ui.pauseButton.hide()
-            self._ui.cancelButton.setText(T("cancel"))
+            self._ui.finishButton.hide()
             self._ui.durationLabel.hide()
             self._ui.duration.hide()
             self._ui.mutedInfo.hide()
             self._ui.skippedInfo.hide()
             self._ui.missingInfo.hide()
-        self._ui.cancelButton.show()
         self._downloader.status.updated.connect(self._updateStatus)
         self._downloader.progress.updated.connect(self._updateProgress)
         self._downloader.finished.connect(self._downloadFinishHandler)
@@ -97,6 +97,7 @@ class Download(QtWidgets.QWidget):
             self._ui.retryButton.hide()
             self._ui.pauseButton.hide()
             self._ui.cancelButton.hide()
+            self._ui.finishButton.hide()
             self._ui.openFileButton.hide()
             self._downloader = None
 
@@ -104,10 +105,10 @@ class Download(QtWidgets.QWidget):
         if self._downloader.status.pauseState.isFalse():
             self._ui.pauseButton.setText(T("pause"))
         if self._downloader.status.terminateState.isInProgress():
-            self.showStatus(T("stopping" if isinstance(self._downloader, StreamDownloader) else "canceling", ellipsis=True))
+            self.showStatus(T("stopping" if getattr(self._downloader.status, "terminateState", None) and self._downloader.status.terminateState.isProcessing() and getattr(self._downloader.engine, "_isFinishingEarly", False) else "canceling", ellipsis=True))
             self._ui.pauseButton.setEnabled(False)
             self._ui.cancelButton.setEnabled(False)
-            self._ui.cancelButton.setText(T("stopping" if isinstance(self._downloader, StreamDownloader) else "canceling", ellipsis=True))
+            self._ui.finishButton.setEnabled(False)
         elif not self._downloader.status.pauseState.isFalse():
             if self._downloader.status.pauseState.isInProgress():
                 self.showStatus(T("pausing", ellipsis=True))
@@ -121,6 +122,37 @@ class Download(QtWidgets.QWidget):
             self.showStatus(T("preparing", ellipsis=True))
         elif self._downloader.status.isDownloading():
             self.showStatus(T("live-downloading" if isinstance(self._downloader, StreamDownloader) else "downloading", ellipsis=True))
+
+        if self._downloader.status.isDone():
+            if self._downloader.status.terminateState.isTrue():
+                if isinstance(self._downloader.status.getError(), Exceptions.AbortRequested):
+                    if getattr(self._downloader.engine, "_isFinishingEarly", False):
+                        self.showStatus(T("download-stopped"))
+                        self.showProgress(100)
+                    else:
+                        self.showAlert(T("download-canceled"))
+                elif self._downloader.status.hasError():
+                    self.showAlert(T("download-aborted"))
+            elif self._downloader.status.hasError():
+                self.showAlert(T("download-aborted"))
+            else:
+                self.showStatus(T("download-completed"))
+                self.showProgress(100)
+
+        if self._downloader.status.isFileRemoved():
+            self._ui.openFolderButton.hide()
+        else:
+            self._ui.openFolderButton.show()
+
+        if self._downloader.status.isDone() and not self._downloader.status.isFileRemoved() and not self._downloader.status.hasError():
+            self._ui.openFileButton.show()
+        
+        self._ui.downloadViewControlBar.openLogsButton.setVisible()
+        
+        if self._downloader.status.isDone():
+            self._ui.pauseButton.hide()
+            self._ui.cancelButton.hide()
+            self._ui.finishButton.hide()
 
     def _updateProgress(self) -> None:
         if self._downloader.status.isPreparing():
@@ -292,8 +324,15 @@ class Download(QtWidgets.QWidget):
             self._downloader.resume()
 
     def cancel(self) -> None:
-        if Utils.ask(*(Messages.ASK.STOP_DOWNLOAD if isinstance(self._downloader, StreamDownloader) else Messages.ASK.CANCEL_DOWNLOAD), parent=self):
+        if Utils.ask(*Messages.ASK.CANCEL_DOWNLOAD, parent=self):
             self._downloader.cancel()
+            if self._downloader.status.terminateState.isFalse():
+                Utils.info(*Messages.INFO.ACTION_PERFORM_ERROR, parent=self)
+
+    def finishEarly(self) -> None:
+        if Utils.ask(*Messages.ASK.STOP_DOWNLOAD, parent=self):
+            if hasattr(self._downloader, "finishEarly"):
+                self._downloader.finishEarly()
             if self._downloader.status.terminateState.isFalse():
                 Utils.info(*Messages.INFO.ACTION_PERFORM_ERROR, parent=self)
 

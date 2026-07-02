@@ -108,7 +108,7 @@ class PlaylistEngine(BaseEngine):
                         segmentsToDownload.append(segment)
                 self._downloadSegments(segmentsToDownload)
                 self._syncProgress()
-            if self._playlistManager.playlist.isEndList() or (self.downloadInfo.type.isVideo() and not self.downloadInfo.isUpdateTrackEnabled()):
+            if self._playlistManager.playlist.isEndList() or (self.downloadInfo.type.isVideo() and not self.downloadInfo.isUpdateTrackEnabled()) or getattr(self, "_isFinishingEarly", False):
                 self._checkDone()
             else:
                 self._refreshTimer.start()
@@ -154,7 +154,7 @@ class PlaylistEngine(BaseEngine):
 
     def _checkDone(self) -> None:
         if len(self._segmentDownloaders) == 0 and not self.status.isDone():
-            if self.status.terminateState.isProcessing() or self._playlistManager.playlist.isEndList() or (self.downloadInfo.type.isVideo() and not self.downloadInfo.isUpdateTrackEnabled()):
+            if self.status.terminateState.isProcessing() or self._playlistManager.playlist.isEndList() or (self.downloadInfo.type.isVideo() and not self.downloadInfo.isUpdateTrackEnabled()) or getattr(self, "_isFinishingEarly", False):
                 if self._FFmpeg == None:
                     self._finish()
                 elif self.status.terminateState.isProcessing():
@@ -198,6 +198,18 @@ class PlaylistEngine(BaseEngine):
 
     def _raiseException(self, exception: Exceptions.AbortRequested | Exceptions.FileSystemError | Exceptions.NetworkError | Exceptions.ProcessError | Exceptions.UnexpectedError) -> None:
         super()._raiseException(exception)
+        if self._refreshTimer.isActive():
+            self._refreshTimer.stop()
+        if self._playlistManager.isRunning():
+            self._playlistManager.abort()
+        if len(self._segmentDownloaders) == 0:
+            self._checkDone()
+        else:
+            App.FileDownloadManager.cancelDownloads(self._segmentDownloaders)
+
+    def finishEarly(self) -> None:
+        super().finishEarly()
+        self._isFinishingEarly = True
         if self._refreshTimer.isActive():
             self._refreshTimer.stop()
         if self._playlistManager.isRunning():
