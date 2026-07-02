@@ -74,6 +74,8 @@ class BaseEngine(QtCore.QObject):
 
     def finishEarly(self) -> None:
         self.logger.warning("Finish early requested.")
+        if self.status.terminateState.isPreparing():
+            self.status.terminateState.setProcessing()
 
     def _raiseException(self, exception: Exception) -> None:
         self.logger.warning("The following exception occurred.")
