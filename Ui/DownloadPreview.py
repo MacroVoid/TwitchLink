@@ -140,7 +140,7 @@ class DownloadPreview(QtWidgets.QWidget):
                 Utils.info(*Messages.INFO.ACTION_PERFORM_ERROR, parent=self)
 
     def openFolder(self) -> None:
-        if not Utils.openFolder(self._downloader.downloadInfo.directory):
+        if not Utils.openFolder(self._downloader.downloadInfo.getAbsoluteDirectory()):
             Utils.info(*Messages.INFO.FOLDER_NOT_FOUND, parent=self)
 
     def openFile(self) -> None:

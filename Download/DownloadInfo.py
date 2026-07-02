@@ -54,7 +54,10 @@ class DownloadInfo(Serializable):
             self.remux = self.optionHistory.isRemuxEnabled()
         elif self.type.isClip():
             self.prioritize = False
-        self.directory = self.optionHistory.getUpdatedDirectory()
+            self.remux = getattr(self.optionHistory, "remux", True)
+        self.createSubfolderForDownloads = self.optionHistory.isCreateSubfolderForDownloadsEnabled()
+
+        self.setDirectory(self.optionHistory.getUpdatedDirectory())
         self.selectedResolutionIndex = 0
         self.fileName = self.generateFileName()
         self.fileFormat = self.getAvailableFormat()
@@ -146,8 +149,13 @@ class DownloadInfo(Serializable):
     def setSkipAdsEnabled(self, enabled: bool) -> None:
         self.skipAds = enabled
 
+
+
     def setRemuxEnabled(self, enabled: bool) -> None:
         self.remux = enabled
+
+    def setCreateSubfolderForDownloadsEnabled(self, enabled: bool) -> None:
+        self.createSubfolderForDownloads = enabled
 
     def isUnmuteVideoEnabled(self) -> bool:
         return self.unmuteVideo
@@ -160,6 +168,11 @@ class DownloadInfo(Serializable):
 
     def isSkipAdsEnabled(self) -> bool:
         return self.skipAds
+
+
+
+    def isCreateSubfolderForDownloadsEnabled(self) -> bool:
+        return getattr(self, "createSubfolderForDownloads", False)
 
     def isRemuxEnabled(self) -> bool:
         return self.remux
@@ -178,9 +191,15 @@ class DownloadInfo(Serializable):
             self.optionHistory.setUnmuteVideoEnabled(self.unmuteVideo)
             self.optionHistory.setUpdateTrackEnabled(self.updateTrack)
             self.optionHistory.setRemuxEnabled(self.remux)
+        self.optionHistory.setCreateSubfolderForDownloadsEnabled(self.createSubfolderForDownloads)
 
     def getUrl(self) -> QtCore.QUrl:
         return self.resolution.url
 
     def getAbsoluteFileName(self) -> str:
-        return Utils.joinPath(self.directory, f"{self.fileName}.{self.fileFormat}")
+        return Utils.joinPath(self.getAbsoluteDirectory(), f"{self.fileName}.{self.fileFormat}")
+
+    def getAbsoluteDirectory(self) -> str:
+        if self.isCreateSubfolderForDownloadsEnabled():
+            return Utils.joinPath(self.directory, self.fileName)
+        return self.directory

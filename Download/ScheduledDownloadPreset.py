@@ -47,6 +47,7 @@ class ScheduledDownloadPreset(Serializable):
         self.skipAds = self.optionHistory.isSkipAdsEnabled()
         self.remux = self.optionHistory.isRemuxEnabled()
         self.downloadChat = self.optionHistory.isDownloadChatEnabled()
+        self.createSubfolderForDownloads = self.optionHistory.isCreateSubfolderForDownloadsEnabled()
         self.preferredResolutionOnly = False
         self.enabled = True
 
@@ -61,6 +62,12 @@ class ScheduledDownloadPreset(Serializable):
         
     def isDownloadChatEnabled(self) -> bool:
         return self.downloadChat
+
+    def setCreateSubfolderForDownloadsEnabled(self, enabled: bool) -> None:
+        self.createSubfolderForDownloads = enabled
+
+    def isCreateSubfolderForDownloadsEnabled(self) -> bool:
+        return getattr(self, "createSubfolderForDownloads", False)
 
     @property
     def optionHistory(self) -> DownloadOptionHistory.ScheduledDownloadHistory:
@@ -110,6 +117,8 @@ class ScheduledDownloadPreset(Serializable):
 
     def isSkipAdsEnabled(self) -> bool:
         return self.skipAds
+
+
 
     def setRemuxEnabled(self, enabled: bool) -> None:
         self.remux = enabled
@@ -169,3 +178,4 @@ class ScheduledDownloadPreset(Serializable):
         self.optionHistory.setSkipAdsEnabled(self.skipAds)
         self.optionHistory.setRemuxEnabled(self.remux)
         self.optionHistory.setDownloadChatEnabled(self.downloadChat)
+        self.optionHistory.setCreateSubfolderForDownloadsEnabled(getattr(self, "createSubfolderForDownloads", False))

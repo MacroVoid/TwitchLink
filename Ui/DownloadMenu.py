@@ -29,6 +29,9 @@ class DownloadMenu(QtWidgets.QDialog, WindowGeometryManager):
     def loadOptions(self) -> None:
         self._ui.windowTitleLabel.setText(T("messages.#download", type=T(self.downloadInfo.type.toString())))
         self.reloadFileDirectory()
+        self._ui.createSubfolderForDownloadsCheckBox.setChecked(self.downloadInfo.isCreateSubfolderForDownloadsEnabled())
+        self._ui.createSubfolderForDownloadsCheckBox.toggled.connect(self.downloadInfo.setCreateSubfolderForDownloadsEnabled)
+        self._ui.createSubfolderForDownloadsCheckBox.toggled.connect(lambda: self.reloadFileDirectory())
         self._ui.fileFormat.currentTextChanged.connect(self.setFormat)
         self._ui.searchDirectory.clicked.connect(self.askSaveAs)
         for resolution in self.downloadInfo.playback.getResolutions():
@@ -140,8 +143,17 @@ class DownloadMenu(QtWidgets.QDialog, WindowGeometryManager):
         self._ui.downloadChatCheckBox.setChecked(self.downloadInfo.downloadChat)
         self._ui.downloadChatCheckBox.toggled.connect(self.downloadInfo.optionHistory.setDownloadChatEnabled)
         self._ui.downloadChatCheckBox.toggled.connect(lambda enabled: setattr(self.downloadInfo, 'downloadChat', enabled))
+        self._ui.downloadChatCheckBox.toggled.connect(self.onDownloadChatToggled)
         self._ui.downloadChatInfo.clicked.connect(self.showDownloadChatInfo)
         Utils.setIconViewer(self._ui.downloadChatInfo, Icons.HELP)
+
+    def onDownloadChatToggled(self, enabled: bool) -> None:
+        from Core import App
+        if enabled:
+            if App.Preferences.download.isCreateSubfolderForDownloadsEnabled():
+                self._ui.createSubfolderForDownloadsCheckBox.setChecked(True)
+        else:
+            self._ui.createSubfolderForDownloadsCheckBox.setChecked(False)
 
     def startRangeChanged(self) -> None:
         self.setFromSeconds(self.checkCropRange(self.getFromSeconds(), maximum=int(self.downloadInfo.content.lengthSeconds) - 1))

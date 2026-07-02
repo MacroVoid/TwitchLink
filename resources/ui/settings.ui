@@ -72,6 +72,7 @@
             </property>
            </widget>
           </item>
+
           <item>
            <widget class="QWidget" name="windowCloseArea" native="true">
             <layout class="QHBoxLayout" name="windowCloseAreaLayout">
@@ -756,6 +757,22 @@
        <string>ui.download</string>
       </attribute>
       <layout class="QVBoxLayout" name="downloadSettingsLayout">
+       <item>
+        <widget class="QGroupBox" name="generalDownloadArea">
+         <property name="title">
+          <string>ui.general</string>
+         </property>
+         <layout class="QVBoxLayout" name="generalDownloadAreaLayout">
+          <item>
+           <widget class="QCheckBox" name="createSubfolderForDownloads">
+            <property name="text">
+             <string>ui.#create_subfolder_for_downloads</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
        <item>
         <widget class="QGroupBox" name="downloadSpeedArea">
          <property name="sizePolicy">

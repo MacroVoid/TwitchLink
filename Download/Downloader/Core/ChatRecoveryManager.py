@@ -2,6 +2,7 @@ import os
 import json
 import glob
 from Core import App
+from Core.Config import Config
 from Services.Logging.Logger import Logger
 from Download.Downloader.Core.Engine.ChatEngine import ChatEngine
 
@@ -10,7 +11,7 @@ class ChatRecoveryManager:
         self.logger = logger
         
     def _getRecoveryDir(self) -> str:
-        recoveryDir = os.path.join(App.TempManager.getTempDirectory(), "ChatRecovery")
+        recoveryDir = os.path.join(Config.TEMP_PATH, "ChatRecovery")
         os.makedirs(recoveryDir, exist_ok=True)
         return recoveryDir
         

@@ -152,17 +152,19 @@ class Download(QtWidgets.QWidget):
         elif isinstance(self._downloader, ClipDownloader):
             return
         self._ui.downloadInfoView.showMutedInfo(self._downloader.progress.mutedFiles, self._downloader.progress.mutedMilliseconds)
-        self._ui.downloadInfoView.showSkippedInfo(self._downloader.progress.skippedFiles, self._downloader.progress.skippedMilliseconds)
+        self._ui.downloadInfoView.showSkippedInfo(self._downloader.progress.skippedFiles + getattr(self._downloader.progress, 'adFiles', 0), self._downloader.progress.skippedMilliseconds + getattr(self._downloader.progress, 'adMilliseconds', 0))
         self._ui.downloadInfoView.showMissingInfo(self._downloader.progress.missingFiles, self._downloader.progress.missingMilliseconds)
         if self._downloader.progress.mutedFiles == 0:
             self._ui.mutedInfo.hide()
         else:
             self._ui.mutedInfo.setText(T("errors.#failed_unmute_segments", fileCount=self._downloader.progress.mutedFiles, time=Utils.formatMilliseconds(self._downloader.progress.mutedMilliseconds)))
             self._ui.mutedInfo.show()
-        if self._downloader.progress.skippedFiles == 0:
+        total_skipped = self._downloader.progress.skippedFiles + getattr(self._downloader.progress, 'adFiles', 0)
+        total_skipped_ms = self._downloader.progress.skippedMilliseconds + getattr(self._downloader.progress, 'adMilliseconds', 0)
+        if total_skipped == 0:
             self._ui.skippedInfo.hide()
         else:
-            self._ui.skippedInfo.setText(T("messages.#skipped_commercial_segments", fileCount=self._downloader.progress.skippedFiles, time=Utils.formatMilliseconds(self._downloader.progress.skippedMilliseconds)))
+            self._ui.skippedInfo.setText(T("messages.#skipped_commercial_segments", fileCount=total_skipped, time=Utils.formatMilliseconds(total_skipped_ms)))
             self._ui.skippedInfo.show()
         if self._downloader.progress.missingFiles == 0:
             self._ui.missingInfo.hide()
@@ -296,7 +298,7 @@ class Download(QtWidgets.QWidget):
                 Utils.info(*Messages.INFO.ACTION_PERFORM_ERROR, parent=self)
 
     def openFolder(self) -> None:
-        if not Utils.openFolder(self._downloader.downloadInfo.directory):
+        if not Utils.openFolder(self._downloader.downloadInfo.getAbsoluteDirectory()):
             Utils.info(*Messages.INFO.FOLDER_NOT_FOUND, parent=self)
 
     def openFile(self) -> None:

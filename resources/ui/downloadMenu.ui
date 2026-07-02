@@ -125,6 +125,13 @@
             <item row="1" column="1">
              <widget class="QComboBox" name="fileFormat"/>
             </item>
+            <item row="2" column="0" colspan="2">
+             <widget class="QCheckBox" name="createSubfolderForDownloadsCheckBox">
+              <property name="text">
+               <string>ui.#create_subfolder_for_downloads</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </widget>
          </item>
@@ -660,6 +667,7 @@
            </property>
           </widget>
          </item>
+
          <item>
           <widget class="QRadioButton" name="adBlockAlternativeScreenRadioButton">
            <property name="text">

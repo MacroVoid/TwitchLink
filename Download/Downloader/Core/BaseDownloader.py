@@ -28,7 +28,14 @@ class BaseDownloader(QtCore.QThread):
             name=f"Downloader_{self.getId()}",
             fileName=f"{Config.APP_NAME}_Download_{Logger.getFormattedTime()}#{self.getId()}.log"
         )
-        self._fileNameLocker = FileNameLocker(self.downloadInfo.getAbsoluteFileName())
+        absoluteFileName = self.downloadInfo.getAbsoluteFileName()
+        if self.downloadInfo.isCreateSubfolderForDownloadsEnabled():
+            from Services.Utils.OSUtils import OSUtils
+            import os
+            directory = os.path.dirname(absoluteFileName)
+            if not OSUtils.isDirectory(directory):
+                OSUtils.createDirectory(directory)
+        self._fileNameLocker = FileNameLocker(absoluteFileName)
         self._fileNameLocker.lock()
         super().started.connect(self._threadStarted)
         super().finished.connect(self._threadFinished)

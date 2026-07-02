@@ -32,7 +32,7 @@ class Config(Meta):
     STATUS_UPDATE_NETWORK_ERROR_MAX_IGNORE_COUNT = 1440
     STATUS_UPDATE_MAX_REDIRECT_COUNT = 10
 
-    USER_AGENT_TEMPLATE = None
+    USER_AGENT_TEMPLATE = "Mozilla/5.0 ({systemInfo}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
 
     SHOW_STATS = [50, [10, 30]]
 

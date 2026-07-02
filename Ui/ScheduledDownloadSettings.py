@@ -43,8 +43,10 @@ class ScheduledDownloadSettings(QtWidgets.QDialog, WindowGeometryManager):
         Utils.setIconViewer(self._ui.preferredResolutionOnlyInfo, Icons.HELP)
         self._ui.downloadChatCheckBox.setChecked(self.virtualPreset.isDownloadChatEnabled())
         self._ui.downloadChatCheckBox.toggled.connect(self.virtualPreset.setDownloadChatEnabled)
+        
         self._ui.adBlockSkipSegmentsRadioButton.setChecked(self.virtualPreset.isSkipAdsEnabled())
         self._ui.adBlockAlternativeScreenRadioButton.setChecked(not self.virtualPreset.isSkipAdsEnabled())
+        
         self._ui.adBlockSkipSegmentsRadioButton.toggled.connect(self.virtualPreset.setSkipAdsEnabled)
         self._ui.adBlockInfo.clicked.connect(self.showAdBlockInfo)
         Utils.setIconViewer(self._ui.adBlockInfo, Icons.HELP)

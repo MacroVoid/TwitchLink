@@ -52,6 +52,7 @@ class General(Serializable):
         self._bookmarks = []
         self._defaultDirectory = ""
 
+
     def setOpenProgressWindowEnabled(self, enabled: bool) -> None:
         self._openProgressWindow = enabled
 
@@ -215,9 +216,16 @@ class Temp(Serializable):
 class Download(Serializable):
     def __init__(self):
         self._downloadSpeed = 20
-        self._reconnectEnabled = False
+        self._reconnectEnabled = True
         self._reconnectAttempts = 10
         self._reconnectInterval = 3000
+        self._createSubfolderForDownloads = True
+
+    def setCreateSubfolderForDownloadsEnabled(self, enabled: bool) -> None:
+        self._createSubfolderForDownloads = enabled
+
+    def isCreateSubfolderForDownloadsEnabled(self) -> bool:
+        return getattr(self, "_createSubfolderForDownloads", False)
 
     def __setup__(self):
         App.FileDownloadManager.setPoolSize(self._downloadSpeed)

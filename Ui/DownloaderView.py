@@ -94,7 +94,7 @@ class DownloaderView(QtWidgets.QWidget):
         elif isinstance(self._downloader, ClipDownloader):
             return
         self._ui.downloadInfoView.showMutedInfo(self._downloader.progress.mutedFiles, self._downloader.progress.mutedMilliseconds)
-        self._ui.downloadInfoView.showSkippedInfo(self._downloader.progress.skippedFiles, self._downloader.progress.skippedMilliseconds)
+        self._ui.downloadInfoView.showSkippedInfo(self._downloader.progress.skippedFiles + getattr(self._downloader.progress, 'adFiles', 0), self._downloader.progress.skippedMilliseconds + getattr(self._downloader.progress, 'adMilliseconds', 0))
         self._ui.downloadInfoView.showMissingInfo(self._downloader.progress.missingFiles, self._downloader.progress.missingMilliseconds)
 
     def _downloadFinishHandler(self) -> None:

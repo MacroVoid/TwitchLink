@@ -13,6 +13,8 @@ class Settings(QtWidgets.QWidget):
         self._ui.openProgressWindow.toggled.connect(App.Preferences.general.setOpenProgressWindowEnabled)
         self._ui.notify.setChecked(App.Preferences.general.isNotifyEnabled())
         self._ui.notify.toggled.connect(App.Preferences.general.setNotifyEnabled)
+        self._ui.createSubfolderForDownloads.setChecked(App.Preferences.download.isCreateSubfolderForDownloadsEnabled())
+        self._ui.createSubfolderForDownloads.toggled.connect(App.Preferences.download.setCreateSubfolderForDownloadsEnabled)
         self._ui.windowClose.setCurrentIndex(1 if App.Preferences.general.isSystemTrayEnabled() else 0)
         self._ui.windowClose.currentIndexChanged.connect(self.windowCloseChanged)
         if not Utils.isMinimizeToSystemTraySupported():

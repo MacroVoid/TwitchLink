@@ -60,6 +60,13 @@ class FileHistory:
     def getAvailableFormats(self) -> list[str]:
         return self.SUPPORTED_FORMATS
 
+    def setCreateSubfolderForDownloadsEnabled(self, enabled: bool) -> None:
+        self.createSubfolderForDownloads = enabled
+
+    def isCreateSubfolderForDownloadsEnabled(self) -> bool:
+        from Core import App
+        return getattr(self, "createSubfolderForDownloads", App.Preferences.download.isCreateSubfolderForDownloadsEnabled())
+
 
 class AudioFormatHistory:
     SUPPORTED_AUDIO_FORMATS = [
@@ -110,6 +117,8 @@ class StreamHistory(BaseOptionHistory, FileHistory, AudioFormatHistory, ChatHist
 
     def isSkipAdsEnabled(self) -> bool:
         return self.skipAds
+
+
 
     def setRemuxEnabled(self, enabled: bool) -> None:
         self.remux = enabled

@@ -63,6 +63,7 @@ class TwitchIntegrityGenerator(QtCore.QObject):
         self._isUpdating = True
         self.integrity = None
         self._profile = QtWebEngineCore.QWebEngineProfile(parent=self)
+        self._profile.setHttpUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36")
         self._profile.setUrlRequestInterceptor(self._requestInterceptor)
         self._webEngineView = QtWebEngineWidgets.QWebEngineView()
         self._webEngineView.setVisible(False)

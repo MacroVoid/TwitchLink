@@ -52,6 +52,7 @@ class PlaylistEngine(BaseEngine):
     def _finish(self) -> None:
         if self._safeTempDirectory.getError() == None:
             self._safeTempDirectory.clear()
+            
         super()._finish()
 
     def _startFFmpegProcess(self) -> None:
@@ -89,9 +90,17 @@ class PlaylistEngine(BaseEngine):
                             self._segmentMapInfo = segment.mapInfo
                             self.progress.totalFiles += 1
                             segmentsToDownload.append(Segment(-segment.sequence - 1, segment.url.resolved(QtCore.QUrl(segment.mapInfo)), segment.datetime, 0, segment.startsAt))
+                    
+                    is_ad = False
+                    if self.downloadInfo.type.isStream() and any(re.match(filter, segment.title) for filter in Config.STREAM_SEGMENT_TITLE_FILTER_REGEX):
+                        is_ad = True
+                        
+
+
                     self.progress.totalFiles += 1
                     self.progress.totalMilliseconds += segment.totalMilliseconds
-                    if self.downloadInfo.type.isStream() and self.downloadInfo.isSkipAdsEnabled() and any(re.match(filter, segment.title) for filter in Config.STREAM_SEGMENT_TITLE_FILTER_REGEX):
+                    
+                    if is_ad and self.downloadInfo.isSkipAdsEnabled():
                         self.progress.skippedFiles += 1
                         self.progress.skippedMilliseconds += segment.totalMilliseconds
                         self.logger.info(f"Skipping Segment: <Sequence: {segment.sequence} / Length: {segment.totalMilliseconds}>\n{segment.url.toString()}")

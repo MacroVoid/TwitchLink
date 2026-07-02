@@ -223,7 +223,8 @@
    <item>
     <widget class="QWidget" name="settingsArea" native="true">
      <layout class="QVBoxLayout" name="settingsAreaLayout">
-      <item><widget class="QCheckBox" name="downloadChatCheckBox"><property name="text"><string>ui.download_chat</string></property></widget></item><property name="leftMargin">
+      <item><widget class="QCheckBox" name="downloadChatCheckBox"><property name="text"><string>ui.download_chat</string></property></widget></item>
+      <property name="leftMargin">
        <number>0</number>
       </property>
       <property name="topMargin">
@@ -341,6 +342,7 @@
         </property>
        </widget>
       </item>
+
       <item>
        <widget class="QRadioButton" name="adBlockAlternativeScreenRadioButton">
         <property name="text">
