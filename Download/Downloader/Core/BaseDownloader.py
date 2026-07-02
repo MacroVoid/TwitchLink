@@ -23,6 +23,7 @@ class BaseDownloader(QtCore.QThread):
         super().__init__(parent=parent)
         self.uuid = uuid.uuid4()
         self.downloadInfo = downloadInfo
+        self.isFinishingEarly = False
         self.status = Modules.Status(parent=self)
         self.progress = Modules.Progress(parent=self)
         self.logger = Logger(
@@ -96,6 +97,7 @@ class BaseDownloader(QtCore.QThread):
 
     def finishEarly(self) -> None:
         self.logger.warning("[ACTION] Finish Early")
+        self.isFinishingEarly = True
         self._finishEarlyRequested.emit()
 
     def abort(self, exception: Exception) -> None:
